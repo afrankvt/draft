@@ -17,6 +17,13 @@ abstract const class DraftMod : WebMod
   new make()
   {
     router = Router { routes=[,] }
+
+    // init pod modified times
+    map := Pod:DateTime[:]
+    Pod.list.each |p| { map[p] = podFile(p).modified }
+    startupModified = map
+
+    // TODO FIXIT: log
   }
 
   ** Router model.
@@ -27,6 +34,8 @@ abstract const class DraftMod : WebMod
   {
     try
     {
+      if (podsModified) echo("# restart")
+
       match := router.match(req.uri, req.method)
       if (match == null) throw DraftErr(404)
 
@@ -39,10 +48,14 @@ abstract const class DraftMod : WebMod
     }
     catch (Err err)
     {
-      if (err isnot DraftErr) err = DraftErr(501, err)
+      if (err isnot DraftErr) err = DraftErr(500, err)
       onErr(err)
     }
   }
+
+//////////////////////////////////////////////////////////////////////////
+// Errs
+//////////////////////////////////////////////////////////////////////////
 
   ** Handle an error condition during a request.
   Void onErr(DraftErr err)
@@ -59,6 +72,44 @@ abstract const class DraftMod : WebMod
     res.statusCode = err.errCode
     res.headers["Content-Type"] = "text/plain"
     res.out.w(buf).flush
+  }
 
+//////////////////////////////////////////////////////////////////////////
+// Pods
+//////////////////////////////////////////////////////////////////////////
+
+  ** Map of pods to modified times at startup.
+  const Pod:DateTime startupModified
+
+  ** Return pod file for this Pod.
+  File podFile(Pod pod)
+  {
+    Env? env := Env.cur
+    file := env.workDir + `_doesnotexist_`
+
+    // walk envs looking for pod file
+    while (!file.exists && env != null)
+    {
+      file = env.workDir + `lib/fan/${pod.name}.pod`
+      env = env.parent
+    }
+
+    // verify exists and return
+    if (!file.exists) throw Err("Pod file not found $pod.name")
+    return file
+  }
+
+  ** Return true if any pods have been modified since startup.
+  Bool podsModified()
+  {
+    true == Pod.list.eachWhile |p|
+    {
+      if (podFile(p).modified > startupModified[p])
+      {
+        echo("# $p.name modified")
+        return true
+      }
+      return null
+    }
   }
 }
