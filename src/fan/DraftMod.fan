@@ -34,7 +34,11 @@ abstract const class DraftMod : WebMod
   {
     try
     {
-      if (podsModified) echo("# restart")
+      if (podsModified)
+      {
+        log.info("Signal for restart")
+        Env.cur.exit(4)
+      }
 
       match := router.match(req.uri, req.method)
       if (match == null) throw DraftErr(404)
@@ -106,10 +110,13 @@ abstract const class DraftMod : WebMod
     {
       if (podFile(p).modified > startupModified[p])
       {
-        echo("# $p.name modified")
+        log.info("$p.name pod has been modified")
         return true
       }
       return null
     }
   }
+
+  ** Log for DraftMod.
+  private const static Log log := Log.get("draft")
 }
