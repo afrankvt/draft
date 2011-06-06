@@ -1,0 +1,7 @@
+#!/bin/sh
+STATUS=4
+while [ $STATUS -eq 4 ]
+do
+  fan draft::TestMain
+  STATUS=$?
+done
