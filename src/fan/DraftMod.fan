@@ -64,13 +64,17 @@ abstract const class DraftMod : WebMod
   ** Handle an error condition during a request.
   Void onErr(DraftErr err)
   {
+    // don't spam logs for favicon
+    if (req.uri == `/favicon.ico`) return
+
+    // assemble request info
     buf := StrBuf()
     buf.add("$err.msg - $req.uri\n")
     req.headers.each |v,k| { buf.add("  $k: $v\n") }
     err.traceToStr.splitLines.each |s| { buf.add("  $s\n") }
 
-    // dump to stdout
-    echo(buf)
+    // log error
+    log.err(buf.toStr.trim)
 
     // send response
     res.statusCode = err.errCode
