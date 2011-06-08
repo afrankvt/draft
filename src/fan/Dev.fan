@@ -3,46 +3,13 @@
 // Licensed under the MIT License
 //
 // History:
-//   6 May 2011  Andy Frank  Creation
+//   6 Jun 2011  Andy Frank  Creation
 //
 
 using concurrent
 using util
 using web
 using wisp
-
-
-//////////////////////////////////////////////////////////////////////////
-// DevMain
-//////////////////////////////////////////////////////////////////////////
-
-** DevMain
-class DevMain : AbstractMain
-{
-  @Opt { help = "HTTP port" }
-  Int port := 8080
-
-  override Int run()
-  {
-    // start restarter actor
-    log  := Log.get("dev-draft")
-    pool := ActorPool()
-    restarter := DevRestarter(pool, log)
-
-    // start proxy server
-    return runServices([
-      WispService
-      {
-        it.port = this.port
-        it.root = DevMod
-        {
-          it.port = this.port+1
-          it.restarter = restarter
-        }
-      },
-    ])
-  }
-}
 
 //////////////////////////////////////////////////////////////////////////
 // DevRestarter
@@ -51,9 +18,10 @@ class DevMain : AbstractMain
 ** DevRestarter
 const class DevRestarter : Actor
 {
-  new make(ActorPool p, Log log) : super(p)
+  new make(ActorPool p, Type type, Int port) : super(p)
   {
-    this.log = log
+    this.type = type
+    this.port = port
   }
 
   ** Check if pods have been modified.
@@ -72,7 +40,6 @@ const class DevRestarter : Actor
       else if (podsModified(map))
       {
         stopProc; startProc; Actor.sleep(2sec)
-        log.info("Restart DraftMod process")
         Actor.locals["ts"] = update
       }
     }
@@ -125,7 +92,7 @@ const class DevRestarter : Actor
   {
     home := Env.cur.homeDir.osPath
     args := ["java", "-cp", "${home}/lib/java/sys.jar", "-Dfan.home=$home",
-             "fanx.tools.Fan", "draft::TestMain", "-port", "8081"]
+             "fanx.tools.Fan", "draft", "-port", "$port", "-proxy", type.qname]
     proc := Process(args).run
 
     Actor.locals["proc"] = proc
@@ -141,7 +108,9 @@ const class DevRestarter : Actor
     log.info("Stop external process")
   }
 
-  private const Log log
+  const Type type
+  const Int port
+  const Log log := Log.get("draft")
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -152,7 +121,11 @@ const class DevRestarter : Actor
 const class DevMod : WebMod
 {
   ** Constructor.
-  new make(|This|? f := null) { if (f != null) f(this) }
+  new make(DevRestarter r)
+  {
+    this.restarter = r
+    this.port = r.port
+  }
 
   ** Target port to proxy requests to.
   const Int port

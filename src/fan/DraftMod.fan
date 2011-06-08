@@ -33,9 +33,9 @@ abstract const class DraftMod : WebMod
       res.headers["Content-Type"] = "text/plain"
       res.out.w(
         "=== Testing ===
-         uri:     $req.uri
-         pattern: $match.route.pattern
-         args:    $match.args")
+          uri:     $req.uri
+          pattern: $match.route.pattern
+          args:    $match.args")
       res.out.flush
     }
     catch (Err err)

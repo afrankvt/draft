@@ -11,26 +11,6 @@ using web
 using wisp
 
 **
-** TestMain.
-**
-internal class TestMain : AbstractMain
-{
-  @Opt { help = "HTTP port" }
-  Int port := 8080
-
-  override Int run()
-  {
-    runServices([
-      WispService
-      {
-        it.port = this.port
-        it.root = TestMod()
-      },
-    ])
-  }
-}
-
-**
 ** TestMod
 **
 internal const class TestMod : DraftMod
