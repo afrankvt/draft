@@ -51,6 +51,7 @@ internal class RouterTest : Test
 
     verifyRouter(test, `/foo`,     #foo,      Str:Str[:])
 // TODO FIXIT: this needs to work
+// maybe this is illegal - can't end in / - expect for "/"
 //    verifyRouter(test, `/foo/`,    #fooIndex, Str:Str[:])
     verifyRouter(test, `/foo/bar`, #bar,      Str:Str[:])
     verifyRouter(test, `/foo/xyz`, #fooArg,   Str:Str["arg":"xyz"])

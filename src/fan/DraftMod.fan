@@ -27,16 +27,17 @@ abstract const class DraftMod : WebMod
   {
     try
     {
+      // match req to Route
       match := router.match(req.uri, req.method)
       if (match == null) throw DraftErr(404)
 
-      res.headers["Content-Type"] = "text/plain"
-      res.out.w(
-        "=== Testing ===
-          uri:     $req.uri
-          pattern: $match.route.pattern
-          args:    $match.args")
-      res.out.flush
+      // delegate to Route.handler
+      h := match.route.handler
+      obj := h.parent.make
+      obj.trap(h.name)
+
+      // TODO - force flush here?
+      // res.out.flush
     }
     catch (Err err)
     {
