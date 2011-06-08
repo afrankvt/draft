@@ -17,13 +17,6 @@ abstract const class DraftMod : WebMod
   new make()
   {
     router = Router { routes=[,] }
-
-    // init pod modified times
-    map := Pod:DateTime[:]
-    Pod.list.each |p| { map[p] = podFile(p).modified }
-    startupModified = map
-
-    // TODO FIXIT: log
   }
 
   ** Router model.
@@ -34,18 +27,13 @@ abstract const class DraftMod : WebMod
   {
     try
     {
-      if (podsModified)
-      {
-        log.info("Signal for restart")
-        Env.cur.exit(4)
-      }
-
       match := router.match(req.uri, req.method)
       if (match == null) throw DraftErr(404)
 
       res.headers["Content-Type"] = "text/plain"
       res.out.w(
-        "uri:     $req.uri
+        "=== Testing ===
+         uri:     $req.uri
          pattern: $match.route.pattern
          args:    $match.args")
       res.out.flush
@@ -80,45 +68,6 @@ abstract const class DraftMod : WebMod
     res.statusCode = err.errCode
     res.headers["Content-Type"] = "text/plain"
     res.out.w(buf).flush
-  }
-
-//////////////////////////////////////////////////////////////////////////
-// Pods
-//////////////////////////////////////////////////////////////////////////
-
-  ** Map of pods to modified times at startup.
-  const Pod:DateTime startupModified
-
-  ** Return pod file for this Pod.
-  File podFile(Pod pod)
-  {
-    Env? env := Env.cur
-    file := env.workDir + `_doesnotexist_`
-
-    // walk envs looking for pod file
-    while (!file.exists && env != null)
-    {
-      file = env.workDir + `lib/fan/${pod.name}.pod`
-      env = env.parent
-    }
-
-    // verify exists and return
-    if (!file.exists) throw Err("Pod file not found $pod.name")
-    return file
-  }
-
-  ** Return true if any pods have been modified since startup.
-  Bool podsModified()
-  {
-    true == Pod.list.eachWhile |p|
-    {
-      if (podFile(p).modified > startupModified[p])
-      {
-        log.info("$p.name pod has been modified")
-        return true
-      }
-      return null
-    }
   }
 
   ** Log for DraftMod.
