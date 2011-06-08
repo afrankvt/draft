@@ -13,7 +13,7 @@ using wisp
 **
 ** TestMain.
 **
-class TestMain : AbstractMain
+internal class TestMain : AbstractMain
 {
   @Opt { help = "HTTP port" }
   Int port := 8080
@@ -33,7 +33,7 @@ class TestMain : AbstractMain
 **
 ** TestMod
 **
-const class TestMod : DraftMod
+internal const class TestMod : DraftMod
 {
   ** Constructor.
   new make()
