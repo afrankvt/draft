@@ -28,12 +28,26 @@ internal const class TestMod : DraftMod
   }
 
   ** Foo handler
-  Void foo() {}
+  Void foo() { dump }
 
   ** FooBar handler
-  Void fooBar() {}
+  Void fooBar() { dump }
 
   ** Foo {id} handler
-  Void fooId() {}
+  Void fooId() { dump }
+
+  Void dump()
+  {
+    /*
+    res.headers["Content-Type"] = "text/plain"
+    res.out.w(
+      "=== Testing ===
+        uri:     $req.uri
+        pattern: $match.route.pattern
+        method:  $match.route.handler
+        args:    $match.args")
+    res.out.flush
+    */
+  }
 }
 
