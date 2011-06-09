@@ -140,6 +140,7 @@ const class DevMod : WebMod
 
     // proxy request
     c := WebClient()
+    c.followRedirects = false
     c.reqUri = `http://localhost:${port}${req.uri.relToAuth}`
     c.reqMethod = req.method
     req.headers.each |v,k|

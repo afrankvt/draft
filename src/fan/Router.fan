@@ -54,9 +54,12 @@ const class Route
     this.handler = handler
 
     try
-      this.tokens  = pattern[1..-1].split('/').map |v| { RouteToken(v) }
-    catch (Err err)
-      throw ArgErr("Invalid pattern $pattern.toCode", err)
+    {
+      this.tokens = pattern == "/"
+        ? RouteToken#.emptyList
+        : pattern[1..-1].split('/').map |v| { RouteToken(v) }
+    }
+    catch (Err err) throw ArgErr("Invalid pattern $pattern.toCode", err)
   }
 
   ** URI pattern for this route.

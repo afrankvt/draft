@@ -33,8 +33,8 @@ abstract const class DraftMod : WebMod
 
       // delegate to Route.handler
       h := match.route.handler
-      obj := h.parent.make
-      obj.trap(h.name)
+      args := h.params.isEmpty ? null : [match.args]
+      h.parent.make.trap(h.name, args)
 
       // TODO - force flush here?
       // res.out.flush
