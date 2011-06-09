@@ -22,11 +22,26 @@ abstract const class DraftMod : WebMod
   ** Router model.
   const Router router
 
+  **
+  ** Directory to publish as public files under `/pub/` URI:
+  **   pubDir := `/foo/bar/`
+  **   ~/foo/bar/index.css     =>  `/pub/index.css`
+  **   ~/foo/bar/img/logo.png  =>  `/pub/img/logo.png`
+  **
+  const File? pubDir := null
+
   ** Service incoming request.
   override Void onService()
   {
     try
     {
+      // set mod
+      req.mod = this
+
+      // check for pub
+      if (req.uri.path.first == "pub" && pubDir != null)
+        { onServicePub; return }
+
       // match req to Route
       match := router.match(req.uri, req.method)
       if (match == null) throw DraftErr(404)
@@ -44,6 +59,14 @@ abstract const class DraftMod : WebMod
       if (err isnot DraftErr) err = DraftErr(500, err)
       onErr(err)
     }
+  }
+
+  ** Service a pub request.
+  private Void onServicePub()
+  {
+    file := pubDir + req.uri[1..-1]
+    if (!file.exists) throw DraftErr(404)
+    FileWeblet(file).onService
   }
 
 //////////////////////////////////////////////////////////////////////////
