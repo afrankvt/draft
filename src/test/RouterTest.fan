@@ -43,6 +43,7 @@ internal class RouterTest : Test
   {
     test := Router {
       routes = [
+        Route("/",          "GET", #index),
         Route("/foo",       "GET", #foo),
         Route("/foo/bar",   "GET", #bar),
         Route("/foo/{arg}", "GET", #fooArg),
@@ -65,8 +66,9 @@ internal class RouterTest : Test
   }
 
   // dummy handlers
+  private Void index() {}
   private Void foo() {}
   private Void bar() {}
-  private Void fooIndex() {}
+//  private Void fooIndex() {}
   private Void fooArg() {}
 }
