@@ -156,7 +156,9 @@ const class DevMod : WebMod
     c.readRes
     res.statusCode = c.resCode
     c.resHeaders.each |v,k| { res.headers[k] = v }
-    res.out.writeBuf(c.resIn.readAllBuf).flush
+    if (c.resHeaders["Content-Type"]   != null ||
+        c.resHeaders["Content-Length"] != null)
+      res.out.writeBuf(c.resIn.readAllBuf).flush
     c.close
   }
 }
