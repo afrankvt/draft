@@ -39,6 +39,7 @@ const class DevRestarter : Actor
       }
       else if (podsModified(map))
       {
+        log.info("Pods modified, restarting WispService")
         stopProc; startProc; Actor.sleep(2sec)
         Actor.locals["ts"] = update
       }
@@ -51,7 +52,7 @@ const class DevRestarter : Actor
   {
     map := Pod:DateTime[:]
     Pod.list.each |p| { map[p] = podFile(p).modified }
-    log.info("Update pod timestamps ($map.size pods)")
+    log.debug("Update pod timestamps ($map.size pods)")
     return map
   }
 
@@ -80,7 +81,7 @@ const class DevRestarter : Actor
     {
       if (podFile(p).modified > map[p])
       {
-        log.info("$p.name pod has been modified")
+        log.debug("$p.name pod has been modified")
         return true
       }
       return null
@@ -96,7 +97,7 @@ const class DevRestarter : Actor
     proc := Process(args).run
 
     Actor.locals["proc"] = proc
-    log.info("Start external process")
+    log.debug("Start external process")
   }
 
   ** Stop DraftMod process.
@@ -105,7 +106,7 @@ const class DevRestarter : Actor
     proc := Actor.locals["proc"] as Process
     if (proc == null) return
     proc.kill
-    log.info("Stop external process")
+    log.debug("Stop external process")
   }
 
   const Type type
