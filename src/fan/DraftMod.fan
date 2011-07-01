@@ -30,6 +30,12 @@ abstract const class DraftMod : WebMod
   **
   const File? pubDir := null
 
+  ** Invoked prior to serviceing the current request.
+  virtual Void onBeforeService(Str:Str args) {}
+
+  ** Invoked after serviceing the current request.
+  virtual Void onAfterService(Str:Str args) {}
+
   ** Service incoming request.
   override Void onService()
   {
@@ -46,10 +52,16 @@ abstract const class DraftMod : WebMod
       match := router.match(req.uri, req.method)
       if (match == null) throw DraftErr(404)
 
+      // allow pre-service
+      onBeforeService(match.args)
+
       // delegate to Route.handler
       h := match.route.handler
       args := h.params.isEmpty ? null : [match.args]
       h.parent.make.trap(h.name, args)
+
+      // allow post-service
+      onAfterService(match.args)
 
       // TODO - force flush here?
       // res.out.flush
