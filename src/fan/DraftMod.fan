@@ -119,9 +119,13 @@ abstract const class DraftMod : WebMod
     // log error
     log.err(buf.toStr.trim)
 
+    // pick best err msg
+    msg := err.errCode == 500 && err.cause != null ? err.cause.msg : err.msg
+
     // send response
     res.statusCode = err.errCode
     res.headers["Content-Type"] = "text/plain"
+    res.headers["Draft-Err-Msg"] = msg
     res.out.w(buf).flush
   }
 
