@@ -151,7 +151,7 @@ const class DevMod : WebMod
     }
     c.writeReq
     if (req.method == "POST")
-      c.reqOut.writeBuf(req.in.readAllBuf)
+      c.reqOut.writeBuf(req.in.readAllBuf).flush
 
     // proxy response
     c.readRes
