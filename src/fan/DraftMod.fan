@@ -63,6 +63,9 @@ abstract const class DraftMod : WebMod
       // allow post-service
       onAfterService(match.args)
 
+      // store flash for next req
+      req.session["draft.flash"] = flash.res.ro
+
       // TODO - force flush here?
       // res.out.flush
     }
@@ -79,6 +82,22 @@ abstract const class DraftMod : WebMod
     file := pubDir + req.uri[1..-1]
     if (!file.exists) throw DraftErr(404)
     FileWeblet(file).onService
+  }
+
+//////////////////////////////////////////////////////////////////////////
+// Flash
+//////////////////////////////////////////////////////////////////////////
+
+  ** Get flash instance for this request.
+  Flash flash()
+  {
+    flash := req.stash["draft.flash"]
+    if (flash == null)
+    {
+      map := req.session["draft.flash"] ?: Str:Str[:]
+      req.stash["draft.flash"] = flash = Flash(map)
+    }
+    return flash
   }
 
 //////////////////////////////////////////////////////////////////////////
