@@ -52,6 +52,10 @@ abstract const class DraftMod : WebMod
       match := router.match(req.uri, req.method)
       if (match == null) throw DraftErr(404)
 
+      // access session here before response is commited so
+      // session cookie has a chance to be added to res header
+      dummay := flash
+
       // allow pre-service
       onBeforeService(match.args)
 
