@@ -120,10 +120,15 @@ abstract const class DraftMod : WebMod
     // pick best err msg
     msg := err.errCode == 500 && err.cause != null ? err.cause.msg : err.msg
 
+    // setup response if not already commited
+    if (!res.isCommitted)
+    {
+      res.statusCode = err.errCode
+      res.headers["Content-Type"] = "text/html; charset=UTF-8"
+      res.headers["Draft-Err-Msg"] = msg
+    }
+
     // send HTML response
-    res.statusCode = err.errCode
-    res.headers["Content-Type"] = "text/html; charset=UTF-8"
-    res.headers["Draft-Err-Msg"] = msg
     out := res.out
     out.docType
     out.html
