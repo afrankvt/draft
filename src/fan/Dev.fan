@@ -93,7 +93,7 @@ const class DevRestarter : Actor
   {
     home := Env.cur.homeDir.osPath
     args := ["java", "-cp", "${home}/lib/java/sys.jar", "-Dfan.home=$home",
-             "fanx.tools.Fan", "draft", "-port", "$port", "-proxy", type.qname]
+             "fanx.tools.Fan", "wisp", "-port", "$port", type.qname]
     proc := Process(args).run
 
     Actor.locals["proc"] = proc
