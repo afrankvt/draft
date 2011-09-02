@@ -23,7 +23,7 @@ abstract const class DraftMod : WebMod
   const Router router
 
   **
-  ** Directory to publish as public files under `/pub/` URI:
+  ** Directory to publish as public files under '/pub/' URI:
   **   pubDir := `/foo/bar/`
   **   ~/foo/bar/index.css     =>  `/pub/index.css`
   **   ~/foo/bar/img/logo.png  =>  `/pub/img/logo.png`
