@@ -85,14 +85,38 @@ Java support in this area doesn't appear to be stellar. See `DevRestarter`
 
 ## Running
 
-    $ fan draft myPod::MyMod
+Simplest way to run Draft is to just pass in the pod containing your
+`DraftMod` subclass:
+
+    $ fan draft mypod
+
+Type `fan draft` to see list of options:
+
+    $ fan draft
+    usage: fan draft [options] <pod | pod::Type>
+      -prod          run in production mode
+      -port  <port>  port to run HTTP server on (defaults to 8080)
+      -props <file>  pass in props file for DraftMod.props
 
 ## Production
 
 While the `draft::DevMod` greatly improves development efficiency, running a
 proxy server in front of your site probably isn't what you want to do in
-production :) There is a new utility added to Wisp for Fantom 1.0.60 to run a
-WebMod directly. For production sites, this should be used to run your site
-most efficiently:
+production :) To run your DraftMod directly for production environments, use
+the `-prod` flag when launching:
 
-    $ fan wisp myPod::MyMod
+    $ fan draft -prod mypod
+
+## Props File
+
+Draft can take an optional [props](http://fantom.org/doc/sys/InStream.html#readProps)
+props file to populate the `DraftMod.props` field:
+
+    $ fan draft -props config.props mypod
+
+If the props file contains a `pubDir` property, that property will be used to
+configure `DraftMod.pubDir` by default:
+
+    // config.props
+    pubDir=/Users/andy/proj/example/pub/
+
