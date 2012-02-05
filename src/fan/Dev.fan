@@ -18,10 +18,9 @@ using wisp
 ** DevRestarter
 const class DevRestarter : Actor
 {
-  new make(ActorPool p, Type type, Int port) : super(p)
+  new make(ActorPool p, |This| f) : super(p)
   {
-    this.type = type
-    this.port = port
+    f(this)
   }
 
   ** Check if pods have been modified.
@@ -93,7 +92,9 @@ const class DevRestarter : Actor
   {
     home := Env.cur.homeDir.osPath
     args := ["java", "-cp", "${home}/lib/java/sys.jar", "-Dfan.home=$home",
-             "fanx.tools.Fan", "wisp", "-port", "$port", type.qname]
+             "fanx.tools.Fan", "draft", "-port", "$port", "-prod"]
+    if (props != null) args.addAll(["-props", props.osPath])
+    args.add(type.qname)
     proc := Process(args).run
 
     Actor.locals["proc"] = proc
@@ -111,6 +112,7 @@ const class DevRestarter : Actor
 
   const Type type
   const Int port
+  const File? props
   const Log log := Log.get("draft")
 }
 

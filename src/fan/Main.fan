@@ -17,8 +17,14 @@ using wisp
 **
 class Main
 {
+  ** True for production mode.
+  Bool prod := false
+
   ** HTTP port to run Wisp on.
   Int port := 8080
+
+  ** Props file to pass to `DraftMod.props`.
+  File? props := null
 
   ** Entry-point.
   Int main()
@@ -27,19 +33,46 @@ class Main
     args := Env.cur.args
     if (checkArgs(args) != 0) return -1
 
-    // verify our mod
-    type := Type.find(args.last, false)
+    // find and verify webmod
+    pod  := Pod.find(args.last, false)
+    type := pod==null ? Type.find(args.last, false) : pod.types.find |t| { t.fits(DraftMod#) }
     if (type == null) return err("$args.first not found")
-    if (!type.fits(WebMod#)) return err("$type does not extend WebMod")
+    if (!type.fits(DraftMod#)) return err("$type does not extend DraftMod")
+
+    // check for production mode
+    if (prod)
+    {
+      setupDraftEnv
+      runServices([WispService
+      {
+        it.port = this.port
+        it.root = type.make
+      }])
+      return 0
+    }
 
     // start restarter actor
     pool := ActorPool()
-    restarter := DevRestarter(pool, type, port+1)
+    restarter := DevRestarter(pool)
+    {
+      it.type  = type
+      it.port  = this.port + 1
+      it.props = this.props
+    }
 
     // start proxy server
     mod := DevMod(restarter)
     runServices([WispService { it.port=this.port; it.root=mod }])
     return 0
+  }
+
+  ** Setup DraftEnv.
+  private Void setupDraftEnv()
+  {
+    Actor.locals["draft.env"] = DraftEnv
+    {
+      if (this.props != null) it.props = this.props.readProps
+    }
   }
 
   ** Check arguments.
@@ -51,10 +84,20 @@ class Main
       arg := args[i]
       switch (arg)
       {
+        case "-prod":
+          this.prod = true
+
         case "-port":
           p := args[i+1].toInt(10, false)
           if (p == null || p < 0) return err("Invalid port ${args[i+1]}")
           this.port = p
+
+        case "-props":
+          p := args[i+1]
+          f := File.os(p)
+          if (!f.exists) f = p.toUri.toFile
+          if (!f.exists) return err("File not found $p")
+          this.props = f
       }
     }
     return 0
@@ -79,7 +122,10 @@ class Main
   ** Print usage.
   private Int help()
   {
-    echo("usage: fan draft [-port <port> | -prod] <pod::Type>")
+    echo("usage: fan draft [options] <pod | pod::Type>
+            -prod          run in production mode
+            -port  <port>  port to run HTTP server on (defaults to 8080)
+            -props <file>  pass in props file for DraftMod.props")
     return -1
   }
 

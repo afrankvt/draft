@@ -17,6 +17,10 @@ abstract const class DraftMod : WebMod
   new make()
   {
     router = Router { routes=[,] }
+
+    // check for pubDir prop
+    if (props.containsKey("pubDir"))
+      pubDir = props["pubDir"].toUri.toFile
   }
 
   ** Router model.
@@ -25,10 +29,14 @@ abstract const class DraftMod : WebMod
   **
   ** Directory to publish as public files under '/pub/' URI:
   **   pubDir := `/foo/bar/`
-  **   ~/foo/bar/index.css     =>  `/pub/index.css`
-  **   ~/foo/bar/img/logo.png  =>  `/pub/img/logo.png`
+  **   /foo/bar/index.css     =>  `/pub/index.css`
+  **   /foo/bar/img/logo.png  =>  `/pub/img/logo.png`
   **
   const File? pubDir := null
+
+  ** General purpose props map.  If a 'pubDir' value exists in
+  ** this map, it will be used to configure `pubDir` field.
+  Str:Str props() { DraftEnv.cur.props }
 
   ** Invoked prior to serviceing the current request.
   virtual Void onBeforeService(Str:Str args) {}
