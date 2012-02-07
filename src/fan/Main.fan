@@ -71,7 +71,11 @@ class Main
   {
     Actor.locals["draft.env"] = DraftEnv
     {
-      if (this.props != null) it.props = this.props.readProps
+      if (this.props != null)
+      {
+        it.props = this.props.readProps
+        log.info("props file read ($this.props.osPath)")
+      }
     }
   }
 
