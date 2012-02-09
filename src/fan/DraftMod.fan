@@ -56,6 +56,10 @@ abstract const class DraftMod : WebMod
       if (req.uri.path.first == "pub" && pubDir != null)
         { onServicePub; return }
 
+      // check for pod
+      if (req.uri.path.first == "pod")
+        { onServicePod; return }
+
       // match req to Route
       match := router.match(req.uri, req.method)
       if (match == null) throw DraftErr(404)
@@ -93,6 +97,23 @@ abstract const class DraftMod : WebMod
   {
     file := pubDir + req.uri[1..-1]
     if (!file.exists) throw DraftErr(404)
+    FileWeblet(file).onService
+  }
+
+  ** Service a pod request.
+  private Void onServicePod()
+  {
+    // must have at least 3 path segments
+    path := req.uri.path
+    if (path.size < 2) throw DraftErr(404)
+
+    // lookup pod
+    pod := Pod.find(path[1], false)
+    if (pod == null) throw DraftErr(404)
+
+    // lookup file
+    file := pod.file(`/` + req.uri[2..-1], false)
+    if (file == null) throw DraftErr(404)
     FileWeblet(file).onService
   }
 
