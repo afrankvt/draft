@@ -1,5 +1,10 @@
 # Draft Mini Web Framework
 
+**High CPU usage: there is a bug in the current versions of Fantom (<= 1.0.61)
+where repeated process killing/starting can saturate CPU usage.  This has been
+fixed in [tip](http://hg.fantom.org/repos/fan-1.0) - and will be included in
+Build 1.0.62 when it is released.**
+
 *This project is functional, but is still under development, is missing
 features, and very likely to change. See Disclaimers below.*
 
