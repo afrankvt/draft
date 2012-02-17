@@ -60,6 +60,7 @@ Java support in this area doesn't appear to be stellar. See `DevRestarter`
 
 ## Example
 
+    :::fantom
     const class MyMod : DraftMod
     {
       ** Constructor.
@@ -104,7 +105,6 @@ Type `fan draft` to see list of options:
     usage: fan draft [options] <pod | pod::Type>
       -prod          run in production mode
       -port  <port>  port to run HTTP server on (defaults to 8080)
-      -props <file>  pass in props file for DraftMod.props
 
 ## Production
 
@@ -115,16 +115,11 @@ the `-prod` flag when launching:
 
     $ fan draft -prod mypod
 
-## Props File
+## etc/draft/config.props
 
-Draft can take an optional [props](http://fantom.org/doc/sys/InStream.html#readProps)
-props file to populate the `DraftMod.props` field:
+Some parameters can be defined in `etc/draft/config.props` (see
+[docLang::Env](http://fantom.org/doc/docLang/Env.html) and
+[sys::Env#config](http://fantom.org/doc/sys/Env.html#config) for more info):
 
-    $ fan draft -props config.props mypod
-
-If the props file contains a `pubDir` property, that property will be used to
-configure `DraftMod.pubDir` by default:
-
-    // config.props
+    // configures `DraftMod.pubDir`
     pubDir=/Users/andy/proj/example/pub/
-

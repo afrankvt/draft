@@ -19,8 +19,8 @@ abstract const class DraftMod : WebMod
     router = Router { routes=[,] }
 
     // check for pubDir prop
-    if (props.containsKey("pubDir"))
-      pubDir = props["pubDir"].toUri.toFile
+    dir := typeof.pod.config("pubDir")
+    if (dir != null) pubDir = dir.toUri.toFile
   }
 
   ** Router model.
@@ -32,11 +32,10 @@ abstract const class DraftMod : WebMod
   **   /foo/bar/index.css     =>  `/pub/index.css`
   **   /foo/bar/img/logo.png  =>  `/pub/img/logo.png`
   **
+  ** The pubDir may also be defined as a [config]`sys::Env#config`
+  ** property in 'etc/draft/config.props`
+  **
   const File? pubDir := null
-
-  ** General purpose props map.  If a 'pubDir' value exists in
-  ** this map, it will be used to configure `pubDir` field.
-  Str:Str props() { DraftEnv.cur.props }
 
   ** Invoked prior to serviceing the current request.
   virtual Void onBeforeService(Str:Str args) {}
