@@ -23,9 +23,6 @@ class Main
   ** HTTP port to run Wisp on.
   Int port := 8080
 
-  ** Props file to pass to `DraftMod.props`.
-  File? props := null
-
   ** Entry-point.
   Int main()
   {
@@ -42,7 +39,6 @@ class Main
     // check for production mode
     if (prod)
     {
-      setupDraftEnv
       runServices([WispService
       {
         it.port = this.port
@@ -57,26 +53,12 @@ class Main
     {
       it.type  = type
       it.port  = this.port + 1
-      it.props = this.props
     }
 
     // start proxy server
     mod := DevMod(restarter)
     runServices([WispService { it.port=this.port; it.root=mod }])
     return 0
-  }
-
-  ** Setup DraftEnv.
-  private Void setupDraftEnv()
-  {
-    Actor.locals["draft.env"] = DraftEnv
-    {
-      if (this.props != null)
-      {
-        it.props = this.props.readProps
-        log.info("props file read ($this.props.osPath)")
-      }
-    }
   }
 
   ** Check arguments.
@@ -95,13 +77,6 @@ class Main
           p := args[i+1].toInt(10, false)
           if (p == null || p < 0) return err("Invalid port ${args[i+1]}")
           this.port = p
-
-        case "-props":
-          p := args[i+1]
-          f := File.os(p)
-          if (!f.exists) f = p.toUri.toFile
-          if (!f.exists) return err("File not found $p")
-          this.props = f
       }
     }
     return 0
@@ -128,8 +103,7 @@ class Main
   {
     echo("usage: fan draft [options] <pod | pod::Type>
             -prod          run in production mode
-            -port  <port>  port to run HTTP server on (defaults to 8080)
-            -props <file>  pass in props file for DraftMod.props")
+            -port  <port>  port to run HTTP server on (defaults to 8080)")
     return -1
   }
 
