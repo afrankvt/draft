@@ -64,7 +64,18 @@ const class DevRestarter : Actor
     // walk envs looking for pod file
     while (!file.exists && env != null)
     {
-      file = env.workDir + `lib/fan/${pod.name}.pod`
+      if (env is PathEnv)
+      {
+        ((PathEnv)env).path.eachWhile |p|
+        {
+          file = p + `lib/fan/${pod.name}.pod`
+          return file.exists ? true : null
+        }
+      }
+      else
+      {
+        file = env.workDir + `lib/fan/${pod.name}.pod`
+      }
       env = env.parent
     }
 
