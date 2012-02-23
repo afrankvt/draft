@@ -1,5 +1,6 @@
 syntax glob
 
+fan.props
 .DS_Store
 draft.tmproj
 design.txt
