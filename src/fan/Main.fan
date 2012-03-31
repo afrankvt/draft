@@ -55,6 +55,9 @@ class Main
       it.port  = this.port + 1
     }
 
+    // boot proxy
+    restarter.checkPods
+
     // start proxy server
     mod := DevMod(restarter)
     runServices([WispService { it.port=this.port; it.root=mod }])
