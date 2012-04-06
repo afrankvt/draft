@@ -37,6 +37,12 @@ abstract const class DraftMod : WebMod
   **
   const File? pubDir := null
 
+  **
+  ** Map of URI path names to sub-WebMods. Sub mods are checked
+  ** for matching routes before we process our own routes.
+  **
+  const Str:WebMod subMods := Str:WebMod[:]
+
   ** Invoked prior to serviceing the current request.
   virtual Void onBeforeService(Str:Str args) {}
 
@@ -59,8 +65,18 @@ abstract const class DraftMod : WebMod
       if (req.uri.path.first == "pod")
         { onServicePod; return }
 
+      // check for sub mod
+      sub := subMods[req.modRel.path.first ?: ""]
+      if (sub != null)
+      {
+        req.mod = sub
+        req.modBase = req.modBase + `$req.modRel.path.first/`
+        sub.onService
+        return
+      }
+
       // match req to Route
-      match := router.match(req.uri, req.method)
+      match := router.match(req.modRel, req.method)
       if (match == null) throw DraftErr(404)
 
       // access session here before response is commited so
