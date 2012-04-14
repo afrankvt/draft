@@ -66,6 +66,9 @@ abstract const class DraftMod : WebMod
       // set mod
       req.mod = this
 
+      // log requst
+      logMod?.onService
+
       // check for pub
       if (req.uri.path.first == "pub" && pubDir != null)
         { onServicePub; return }
@@ -102,7 +105,6 @@ abstract const class DraftMod : WebMod
 
       // allow post-service
       onAfterService(match.args)
-      logMod?.onService
 
       // store flash for next req
       req.session["draft.flash"] = flash.res.ro
