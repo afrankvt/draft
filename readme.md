@@ -67,6 +67,7 @@ Java support in this area doesn't appear to be stellar. See `DevRestarter`
       new make()
       {
         pubDir = `/Users/andy/proj/example/pub/`.toFile
+        logDir = `/Users/andy/proj/example/log/`.toFile
         router = Router {
           routes = [
             Route("/", "GET", #index),
