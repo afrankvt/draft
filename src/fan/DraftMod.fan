@@ -6,7 +6,10 @@
 //   14 May 2011  Andy Frank  Creation
 //
 
+using concurrent
+using util
 using web
+using webmod
 
 **
 ** DraftMod
@@ -36,6 +39,12 @@ abstract const class DraftMod : WebMod
   ** property in 'etc/draft/config.props`
   **
   const File? pubDir := null
+
+  **
+  ** Directory to write log files to.  If left null, no logging
+  ** will be performed.
+  **
+  const File? logDir := null
 
   **
   ** Map of URI path names to sub-WebMods. Sub mods are checked
@@ -93,6 +102,7 @@ abstract const class DraftMod : WebMod
 
       // allow post-service
       onAfterService(match.args)
+      logMod?.onService
 
       // store flash for next req
       req.session["draft.flash"] = flash.res.ro
@@ -147,6 +157,25 @@ abstract const class DraftMod : WebMod
     }
     return flash
   }
+
+//////////////////////////////////////////////////////////////////////////
+// Lifecycle
+//////////////////////////////////////////////////////////////////////////
+
+  ** Handle startup tasks.
+  override Void onStart()
+  {
+    if (logDir != null)
+    {
+      // start LogMod
+      logMod := LogMod { dir=logDir; filename="web-{YYYY-MM}.log" }
+      this.logModRef.val = logMod
+      logMod.onStart
+    }
+  }
+
+  private LogMod? logMod() { logModRef.val }
+  private const AtomicRef logModRef := AtomicRef(null)
 
 //////////////////////////////////////////////////////////////////////////
 // Errs
