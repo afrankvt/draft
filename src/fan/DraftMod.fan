@@ -186,8 +186,9 @@ abstract const class DraftMod : WebMod
   ** Handle an error condition during a request.
   Void onErr(DraftErr err)
   {
-    // don't spam logs for favicon
+    // don't spam logs for favicon/robots.txt
     if (req.uri == `/favicon.ico`) return
+    if (req.uri == `/robots.txt`) return
 
     // log error
     logErr(err)
