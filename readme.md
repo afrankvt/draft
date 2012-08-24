@@ -1,10 +1,6 @@
 # Open Bugs and Issues
 
-**[15-Feb-2012] High CPU Usage**  
-There is a bug in the current versions of Fantom (<= 1.0.61) where repeated
-process killing/starting can saturate CPU usage.  This has been fixed in
-[tip](http://hg.fantom.org/repos/fan-1.0) - and will be included in Build
-1.0.62 when it is released.
+Draft requires Fantom 1.0.62 or higher.
 
 # Draft Mini Web Framework
 
@@ -53,7 +49,7 @@ I've decided to put it out in the wild early. All code is released under the
 MIT license - so have at it. Or just wait and watch for it to reach some
 maturity.
 
-Draft requires Fantom 1.0.60 or later. This has only been tested on OS X. I
+Draft requires Fantom 1.0.62 or later. This has only been tested on OS X. I
 might expect to see an issue with process killing and starting on Windows -
 Java support in this area doesn't appear to be stellar. See `DevRestarter`
 (`Dev.fan`) for details.
@@ -71,7 +67,7 @@ Java support in this area doesn't appear to be stellar. See `DevRestarter`
         router = Router {
           routes = [
             Route("/", "GET", #index),
-            Route("/echo/{name}/{age}", "GET", #echo),
+            Route("/echo/{name}/{age}", "GET", #print),
           ]
         }
       }
@@ -83,8 +79,8 @@ Java support in this area doesn't appear to be stellar. See `DevRestarter`
         res.out.printLine("Hi there!")
       }
 
-      ** Echo URL args.
-      Void echo(Str:Str args)
+      ** Print URL args.
+      Void print(Str:Str args)
       {
         name := args["name"]
         age  := args["age"].toInt
