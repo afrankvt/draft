@@ -101,7 +101,8 @@ abstract const class DraftMod : WebMod
       // delegate to Route.handler
       h := match.route.handler
       args := h.params.isEmpty ? null : [match.args]
-      h.parent.make.trap(h.name, args)
+      weblet := h.parent == typeof ? this : h.parent.make
+      weblet.trap(h.name, args)
 
       // allow post-service
       onAfterService(match.args)
