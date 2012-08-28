@@ -163,18 +163,21 @@ const class DevMod : WebMod
       c.reqHeaders[k] = v
     }
     c.writeReq
-    if (req.method == "POST")
-    {
-      if(c.reqHeaders["Expect"] == "100-continue")
-      {
-        c.readRes
-        if (c.resCode != 100) throw IOErr("Expecting 100, not $c.resCode")
-      }
+    
+    is100Continue := c.reqHeaders["Expect"] == "100-continue"
+
+    if (req.method == "POST" && ! is100Continue)
       c.reqOut.writeBuf(req.in.readAllBuf).flush
-    }
 
     // proxy response
     c.readRes
+    
+    if (is100Continue && c.resCode == 100)  
+    {    
+      c.reqOut.writeBuf(req.in.readAllBuf).flush
+      c.readRes // final response after the 100continue
+    }           
+    
     res.statusCode = c.resCode
     c.resHeaders.each |v,k| { res.headers[k] = v }
     if (c.resHeaders["Content-Type"]   != null ||
