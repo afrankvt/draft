@@ -164,7 +164,15 @@ const class DevMod : WebMod
     }
     c.writeReq
     if (req.method == "POST")
+    {
+      if(c.reqHeaders["Expect"] == "100-continue")
+      {
+        echo("100 continue")
+        c.readRes
+        if (c.resCode != 100) throw IOErr("Expecting 100, not $c.resCode")
+      }
       c.reqOut.writeBuf(req.in.readAllBuf).flush
+    }
 
     // proxy response
     c.readRes
