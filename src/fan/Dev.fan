@@ -167,7 +167,6 @@ const class DevMod : WebMod
     {
       if(c.reqHeaders["Expect"] == "100-continue")
       {
-        echo("100 continue")
         c.readRes
         if (c.resCode != 100) throw IOErr("Expecting 100, not $c.resCode")
       }
