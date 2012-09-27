@@ -19,6 +19,7 @@ class Build : BuildPod
     podName = "draft"
     summary = "Draft Web Framework"
     version = Version("1.0")
+    meta = ["vcs.uri" : "http://bitbucket.com/afrankvt/draft/", "license.name":"MIT"]
     depends = ["sys 1.0", "util 1.0", "concurrent 1.0", "web 1.0", "webmod 1.0", "wisp 1.0"]
     srcDirs = [`fan/`, `test/`]
   }
