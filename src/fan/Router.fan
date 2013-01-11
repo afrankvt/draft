@@ -49,8 +49,8 @@ const class Router
 **   --------------  ------------  ----------
 **   "/"             `/`           [:]
 **   "/foo/{bar}"    `/foo/12`     ["bar":"12"]
-**   "/foo/*"        `/bar/x/y/z`  [:]
-**   "/foo/{bar}/*"  `/bar/x/y/z`  ["bar":"x"]
+**   "/foo/*"        `/foo/x/y/z`  [:]
+**   "/foo/{bar}/*"  `/foo/x/y/z`  ["bar":"x"]
 **
 const class Route
 {
