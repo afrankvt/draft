@@ -37,6 +37,14 @@ internal class RouterTest : Test
     r = Route("/foo/{a}/bar/{b}/list", "GET", #foo)
     verifyEq(r.match(`/foo/123/bar/abc/list`, "GET"), Str:Str["a":"123", "b":"abc"])
     verifyEq(r.match(`/foo/123/bax/abc/list`, "GET"), null)
+
+    r = Route("/foo/*", "GET", #foo)
+    verifyEq(r.match(`/foo/x/y/z`, "GET"), Str:Str[:])
+    verifyEq(r.match(`/fox/x/y/z`, "GET"), null)
+
+    r = Route("/foo/{bar}/*", "GET", #foo)
+    verifyEq(r.match(`/foo/x/y/z`, "GET"), Str:Str["bar":"x"])
+    verifyEq(r.match(`/fox/x/y/z`, "GET"), null)
   }
 
   Void testRouter()
