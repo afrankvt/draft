@@ -66,10 +66,12 @@ const class Route
       this.tokens = pattern == "/"
         ? RouteToken#.emptyList
         : pattern[1..-1].split('/').map |v| { RouteToken(v) }
+
+      varIndex := tokens.findIndex |t| { t.type == RouteToken.vararg }
+      if (varIndex != null && varIndex != tokens.size-1) throw Err()
+
     }
     catch (Err err) throw ArgErr("Invalid pattern $pattern.toCode", err)
-
-    this.hasVar = tokens.any |t| { t.type == RouteToken.vararg }
   }
 
   ** URI pattern for this route.
@@ -94,7 +96,11 @@ const class Route
 
     // if size unequal, we know there is no match
     path := uri.path
-    if (tokens.size != path.size && !hasVar) return null
+    if (tokens.last?.type == RouteToken.vararg)
+    {
+      if (path.size < tokens.size) return null
+    }
+    else if (tokens.size != path.size) return null
 
     // iterate tokens looking for matches
     map := Str:Str[:]
@@ -115,7 +121,6 @@ const class Route
 
   ** Parsed tokens.
   private const RouteToken[] tokens
-  private const Bool hasVar
 }
 
 **************************************************************************

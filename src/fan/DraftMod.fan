@@ -50,6 +50,8 @@ abstract const class DraftMod : WebMod
   ** Map of URI path names to sub-WebMods. Sub mods are checked
   ** for matching routes before we process our own routes.
   **
+  // TODO: not sure how this works yet
+  @NoDoc
   const Str:WebMod subMods := Str:WebMod[:]
 
   ** Invoked prior to serviceing the current request.
@@ -97,6 +99,7 @@ abstract const class DraftMod : WebMod
 
       // allow pre-service
       onBeforeService(match.args)
+      if (res.isDone) return
 
       // delegate to Route.handler
       h := match.route.handler
