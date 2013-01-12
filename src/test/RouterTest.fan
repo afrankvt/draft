@@ -38,6 +38,7 @@ internal class RouterTest : Test
     verifyEq(r.match(`/foo/123/bar/abc/list`, "GET"), Str:Str["a":"123", "b":"abc"])
     verifyEq(r.match(`/foo/123/bax/abc/list`, "GET"), null)
 
+    // vararg matches
     r = Route("/foo/*", "GET", #foo)
     verifyEq(r.match(`/foo/x/y/z`, "GET"), Str:Str[:])
     verifyEq(r.match(`/fox/x/y/z`, "GET"), null)
@@ -45,6 +46,21 @@ internal class RouterTest : Test
     r = Route("/foo/{bar}/*", "GET", #foo)
     verifyEq(r.match(`/foo/x/y/z`, "GET"), Str:Str["bar":"x"])
     verifyEq(r.match(`/fox/x/y/z`, "GET"), null)
+
+    r = Route("/x/y/z/*", "GET", #foo)
+    verifyEq(r.match(`/x`,         "GET"), null)
+    verifyEq(r.match(`/x/y`,       "GET"), null)
+    verifyEq(r.match(`/x/y/z`,     "GET"), null)
+    verifyEq(r.match(`/x/y/z/foo`, "GET"), Str:Str[:])
+    verifyEq(r.match(`/x/y/z/foo/a/b/c`, "GET"), Str:Str[:])
+
+    // errs
+// should err?
+//    verifyErr(ArgErr#) { x := Route("foo",      "GET", #foo) }
+    verifyErr(ArgErr#) { x := Route("/foo/*/*", "GET", #foo) }
+    verifyErr(ArgErr#) { x := Route("/*/foo",   "GET", #foo) }
+// allowed?
+//    verifyErr(ArgErr#) { x := Route("/bar/",    "GET", #foo) }
   }
 
   Void testRouter()
