@@ -95,7 +95,7 @@ abstract const class DraftMod : WebMod
 
       // access session here before response is commited so
       // session cookie has a chance to be added to res header
-      dummay := flash
+      dummy := flash
 
       // allow pre-service
       onBeforeService(match.args)
