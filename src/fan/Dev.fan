@@ -152,6 +152,11 @@ const class DevMod : WebMod
     // check pods
     restarter.checkPods
 
+    // 13-Jan-2013
+    // Safari seems to have trouble creating seesion cookie
+    // with proxy server - create session here as a workaround
+    dummy := req.session
+
     // proxy request
     c := WebClient()
     c.followRedirects = false
@@ -163,7 +168,7 @@ const class DevMod : WebMod
       c.reqHeaders[k] = v
     }
     c.writeReq
-    
+
     is100Continue := c.reqHeaders["Expect"] == "100-continue"
 
     if (req.method == "POST" && ! is100Continue)
@@ -171,13 +176,13 @@ const class DevMod : WebMod
 
     // proxy response
     c.readRes
-    
-    if (is100Continue && c.resCode == 100)  
-    {    
+
+    if (is100Continue && c.resCode == 100)
+    {
       c.reqOut.writeBuf(req.in.readAllBuf).flush
       c.readRes // final response after the 100continue
-    }           
-    
+    }
+
     res.statusCode = c.resCode
     c.resHeaders.each |v,k| { res.headers[k] = v }
     if (c.resHeaders["Content-Type"]   != null ||
