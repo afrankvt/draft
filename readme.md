@@ -1,13 +1,6 @@
-# Open Bugs and Issues
-
-Draft requires Fantom 1.0.62 or higher.
-
 # Draft Mini Web Framework
 
-*This project is functional, but is still under development, is missing
-features, and very likely to change. See Disclaimers below.*
-
-The core web pod defines a very useful set of APIs for building web-based
+The core Fantom web pod defines a very useful set of APIs for building web-based
 apps. In particular the [WebMod API](http://fantom.org/doc/web/pod-doc.html#overview)
 provides a simple yet powerful mechanism to compose multiple apps into a
 single site.
@@ -21,40 +14,14 @@ Draft is intended to notch in right above WebMod. It does just enough to cut
 out the boiler plate, plus provide what I believe is most useful for simple to
 moderately complicated web apps:
 
-- Built-in runner for WebMods (no need to write your own main method)
-- Auto restart web server when a pod has been modified (if enabled for
-  development)
-- Simple setup of a public resource directory
-- Route mechanism for web reqs to method handlers
+- Auto restart web server when a pod has been modified for rapid development
+- Route mechanism for mapping web reqs to method handlers
 - Simple handling and customization of error messages/responses
 - Rails-style Flash one-time message API
 - Pre/post service hooks for wrapping request handling
-- My intention here was to define what I think the standard Fantom web
-  framework might look like, while keeping it as lightweight as possible to
-  allow plenty of freedom in building web apps.
+- Simple setup of a public resource directory
 
-## Disclaimer
-
-I started on this project earlier this summer [2011] with intentions to have
-it more or less wrapped up by now. That hasn't happened - and not sure when I
-will be able to complete it at the quality bar I've set.
-
-So this code represents some of the first steps (such as proving out the
-restarter proxy server and route design), but is incomplete, most certainly
-contains bugs, and very likely to change as I move forward.
-
-I believe there is a bit of useful code here though, that others might be able
-to use it to jump start their own projects, or cherry-pick ideas and code. So
-I've decided to put it out in the wild early. All code is released under the
-MIT license - so have at it. Or just wait and watch for it to reach some
-maturity.
-
-Draft requires Fantom 1.0.62 or later. This has only been tested on OS X. I
-might expect to see an issue with process killing and starting on Windows -
-Java support in this area doesn't appear to be stellar. See `DevRestarter`
-(`Dev.fan`) for details.
-
-## Example
+## Using
 
     :::fantom
     const class MyMod : DraftMod
@@ -96,6 +63,11 @@ Simplest way to run Draft is to just pass in the pod containing your
 
     $ fan draft mypod
 
+When running Draft this way, a proxy server is spun up ahead of your website.
+This proxy monitors pod changes and will automatically restart your server
+when a pod becomes out of date.  So no need to restart your server during
+development.
+
 Type `fan draft` to see list of options:
 
     $ fan draft
@@ -120,3 +92,8 @@ Some parameters can be defined in `etc/draft/config.props` (see
 
     // configures `DraftMod.pubDir`
     pubDir=/Users/andy/proj/example/pub/
+
+## Dependancies
+
+Draft requires Fantom 1.0.62 or higher.  For best results always use
+the latest Fantom version available.
