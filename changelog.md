@@ -1,8 +1,9 @@
 ### Version 1.0.2 (working)
+- New RouteGroups
 - Beef up vararg support
-- Nodoc submods for now
 - Allow onBeforeService to complete req before handler runs
 - Workaround for Safari not creating session key w/ proxy server
+- Nodoc submods for now
 
 ### Version 1.0.1 (11-Jan-2013)
 - Support for `*` varargs in Route patterns
