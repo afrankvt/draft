@@ -20,21 +20,60 @@ const class Router
   ** Constructor.
   new make(|This| f) { f(this) }
 
-  ** Route configuration.
-  const Route[] routes
+  ** RouteGroup configuration.
+  const RouteGroup[] groups := [,]
 
-  ** Match a request arguments to first Route in 'routes'.  If no matches
-  ** are found, returns 'null'.
+  ** Route configuration.
+  const Route[] routes := [,]
+
+  ** Match a request to Route. If no matches are found, returns
+  ** 'null'.  The first route that matches is chosen.  Routes
+  ** from `groups` are matched before `routes`.
   RouteMatch? match(Uri uri, Str method)
   {
-    for (i:=0; i<routes.size; i++)
+    for (i:=0; i<groups.size; i++)
     {
-      r := routes[i]
+      g := groups[i]
+      m := _match(g.meta, g.routes, uri, method)
+      if (m != null) return m
+    }
+
+    return _match(null, routes, uri, method)
+  }
+
+  private RouteMatch? _match([Str:Obj]? meta, Route[] list, Uri uri, Str method)
+  {
+    for (i:=0; i<list.size; i++)
+    {
+      r := list[i]
       m := r.match(uri, method)
-      if (m != null) return RouteMatch(r, m)
+      if (m != null) return RouteMatch(meta, r, m)
     }
     return null
   }
+}
+
+**************************************************************************
+** RouteGroup
+**************************************************************************
+
+**
+** RouteGroup models a set of Routes with optional meta-data.
+** If any Routes are matched in a RouteGroup, the meta-data
+** will be stored and available in:
+**
+**   Str:Obj meta := req.stash["draft.route.meta"]
+**
+const class RouteGroup
+{
+  ** It-block ctor.
+  new make(|This| f) { f(this) }
+
+  ** Meta-data for this group.
+  const Str:Obj meta := [:]
+
+  ** Routes for this group.
+  const Route[] routes
 }
 
 **************************************************************************
@@ -181,11 +220,15 @@ internal const class RouteToken
 const class RouteMatch
 {
   ** Constructor
-  new make(Route route, Str:Str args)
+  new make([Str:Obj]? meta, Route route, Str:Str args)
   {
+    this.meta = meta
     this.route = route
     this.args  = args
   }
+
+  ** Optional meta-data for match.
+  const [Str:Obj]? meta
 
   ** Matched route instance.
   const Route route
