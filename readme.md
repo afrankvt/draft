@@ -21,6 +21,14 @@ moderately complicated web apps:
 - Pre/post service hooks for wrapping request handling
 - Simple setup of a public resource directory
 
+## Installing
+
+    fanr install -r http://repo.status302.com/fanr/ draft
+
+API Documentation:
+
+[http://repo.status302.com/doc/draft/](http://repo.status302.com/doc/draft/)
+
 ## Using
 
     :::fantom
