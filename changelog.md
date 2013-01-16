@@ -1,4 +1,4 @@
-### Version 1.0.2 (working)
+### Version 1.0.2 (16-Jan-2013)
 - New RouteGroups
 - Beef up vararg support
 - Allow onBeforeService to complete req before handler runs
