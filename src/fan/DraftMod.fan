@@ -47,6 +47,14 @@ abstract const class DraftMod : WebMod
   const File? logDir := null
 
   **
+  ** Format of the web log records as a string of names.
+  ** See [webmod]`webmod::pod-doc#log`
+  **
+  const Str logFields := "date time c-ip cs(X-Real-IP) cs-method " +
+                         "cs-uri-stem cs-uri-query sc-status time-taken " +
+                         "cs(User-Agent) cs(Referer) cs(Cookie)"
+
+  **
   ** Map of URI path names to sub-WebMods. Sub mods are checked
   ** for matching routes before we process our own routes.
   **
@@ -175,7 +183,7 @@ abstract const class DraftMod : WebMod
     if (logDir != null)
     {
       // start LogMod
-      logMod := LogMod { dir=logDir; filename="web-{YYYY-MM}.log" }
+      logMod := LogMod { dir=logDir; filename="web-{YYYY-MM}.log"; fields=logFields }
       this.logModRef.val = logMod
       logMod.onStart
     }
