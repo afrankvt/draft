@@ -230,14 +230,17 @@ abstract const class DraftMod : WebMod
       // msg
       out.h1.esc(err.msg).h1End
       if (err.msg != msg) out.h2.esc(msg).h2End
-      out.hr
-      // req headers
-      out.table
-      req.headers.each |v,k| { out.tr.td.w(k).tdEnd.td.w(v).tdEnd.trEnd }
-      out.tableEnd
-      out.hr
-      // stack trace
-      out.pre.w(err.traceToStr).preEnd
+      if (!err.errCode.toStr.startsWith("4"))
+      {
+        out.hr
+        // req headers
+        out.table
+        req.headers.each |v,k| { out.tr.td.w(k).tdEnd.td.w(v).tdEnd.trEnd }
+        out.tableEnd
+        out.hr
+        // stack trace
+        out.pre.w(err.traceToStr).preEnd
+      }
     out.bodyEnd
     out.htmlEnd
   }
