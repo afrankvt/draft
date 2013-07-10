@@ -128,6 +128,7 @@ abstract const class DraftMod : WebMod
     catch (Err err)
     {
       if (err isnot DraftErr) err = DraftErr(500, err)
+      logErr(err)
       onErr(err)
     }
   }
@@ -197,15 +198,8 @@ abstract const class DraftMod : WebMod
 //////////////////////////////////////////////////////////////////////////
 
   ** Handle an error condition during a request.
-  Void onErr(DraftErr err)
+  virtual Void onErr(DraftErr err)
   {
-    // don't spam logs for favicon/robots.txt
-    if (req.uri == `/favicon.ico`) return
-    if (req.uri == `/robots.txt`) return
-
-    // log error
-    logErr(err)
-
     // pick best err msg
     msg := err.errCode == 500 && err.cause != null ? err.cause.msg : err.msg
 
@@ -248,6 +242,10 @@ abstract const class DraftMod : WebMod
   ** Log error.
   private Void logErr(DraftErr err)
   {
+    // don't spam logs for favicon/robots.txt
+    if (req.uri == `/favicon.ico`) return
+    if (req.uri == `/robots.txt`) return
+
     buf := StrBuf()
     buf.add("$err.msg - $req.uri\n")
     req.headers.each |v,k| { buf.add("  $k: $v\n") }

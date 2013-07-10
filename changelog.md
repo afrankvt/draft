@@ -1,5 +1,6 @@
-### Version 1.0.2 (working)
+### Version 1.0.3 (working)
 - Expose LogMod.fields
+- Make DraftMod.onErr virtual
 
 ### Version 1.0.2 (16-Jan-2013)
 - New RouteGroups
