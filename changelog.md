@@ -1,4 +1,4 @@
-### Version 1.0.3 (working)
+### Version 1.0.3 (10-Jul-2013)
 - Expose LogMod.fields
 - Make DraftMod.onErr virtual
 
