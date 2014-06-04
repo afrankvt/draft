@@ -242,9 +242,10 @@ abstract const class DraftMod : WebMod
   ** Log error.
   private Void logErr(DraftErr err)
   {
-    // don't spam logs for favicon/robots.txt
+    // don't spam logs for favicon/robots.txt or 404
     if (req.uri == `/favicon.ico`) return
     if (req.uri == `/robots.txt`) return
+    if (err.errCode == 404) return
 
     buf := StrBuf()
     buf.add("$err.msg - $req.uri\n")
