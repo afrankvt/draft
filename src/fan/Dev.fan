@@ -164,6 +164,10 @@ const class DevMod : WebMod
     c.reqMethod = req.method
     req.headers.each |v,k|
     {
+// TODO FIXIT: 4-Jun-2014
+// WebClient does not support sending multiple Set-Cookie headers
+// so can break applications behind the proxy.  This is likley the
+// same problem as the above Safari hack.
       if (k == "Host") return
       c.reqHeaders[k] = v
     }
