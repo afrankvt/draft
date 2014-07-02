@@ -1,5 +1,6 @@
 ### Version 1.0.4 (working)
 - Do not log 404 errs to stdout
+- Fix LogMod to append after request has been processed
 
 ### Version 1.0.3 (10-Jul-2013)
 - Expose LogMod.fields

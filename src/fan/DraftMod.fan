@@ -76,9 +76,6 @@ abstract const class DraftMod : WebMod
       // set mod
       req.mod = this
 
-      // log requst
-      logMod?.onService
-
       // check for pub
       if (req.uri.path.first == "pub" && pubDir != null)
         { onServicePub; return }
@@ -130,6 +127,11 @@ abstract const class DraftMod : WebMod
       if (err isnot DraftErr) err = DraftErr(500, err)
       logErr(err)
       onErr(err)
+    }
+    finally
+    {
+      // log requst
+      logMod?.onService
     }
   }
 
