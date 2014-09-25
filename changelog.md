@@ -1,6 +1,7 @@
-### Version 1.0.4 (working)
+### Version 1.0.4 (25-Sep-2014)
 - Do not log 404 errs to stdout
 - Fix LogMod to append after request has been processed
+- Fix for WebClient gzip change
 
 ### Version 1.0.3 (10-Jul-2013)
 - Expose LogMod.fields
