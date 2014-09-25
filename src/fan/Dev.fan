@@ -188,7 +188,13 @@ const class DevMod : WebMod
     }
 
     res.statusCode = c.resCode
-    c.resHeaders.each |v,k| { res.headers[k] = v }
+    c.resHeaders.each |v,k|
+    {
+      // we don't re-gzip responses
+      if (k == "Content-Encoding" && v == "gzip") return
+      res.headers[k] = v
+    }
+
     if (c.resHeaders["Content-Type"]   != null ||
         c.resHeaders["Content-Length"] != null)
       res.out.writeBuf(c.resIn.readAllBuf).flush
