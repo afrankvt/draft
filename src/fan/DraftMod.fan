@@ -117,7 +117,7 @@ abstract const class DraftMod : WebMod
       onAfterService(match.args)
 
       // store flash for next req
-      req.session["draft.flash"] = flash.res.ro
+      req.session["draft.flash"] = flash.res.ro.toImmutable
 
       // TODO - force flush here?
       // res.out.flush
