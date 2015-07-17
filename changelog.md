@@ -1,5 +1,6 @@
 ### Version 1.0.5 (working)
 - Fix to use immutable for session state (http://fantom.org/forum/topic/2428)
+- Fix for WispService port -> httpPort
 
 ### Version 1.0.4 (25-Sep-2014)
 - Do not log 404 errs to stdout

@@ -41,7 +41,7 @@ class Main
     {
       runServices([WispService
       {
-        it.port = this.port
+        it.httpPort = this.port
         it.root = type.make
       }])
       return 0
@@ -60,7 +60,7 @@ class Main
 
     // start proxy server
     mod := DevMod(restarter)
-    runServices([WispService { it.port=this.port; it.root=mod }])
+    runServices([WispService { it.httpPort=this.port; it.root=mod }])
     return 0
   }
 
