@@ -1,4 +1,4 @@
-### Version 1.0.5 (working)
+### Version 1.0.5 (18-Sep-2015)
 - Fix to use immutable for session state (http://fantom.org/forum/topic/2428)
 - Fix for WispService port -> httpPort
 
