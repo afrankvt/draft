@@ -1,3 +1,6 @@
+### Version 1.0.6 (20-Feb-2017)
+- Fix onServicePod to ignore query string
+
 ### Version 1.0.5 (18-Sep-2015)
 - Fix to use immutable for session state (http://fantom.org/forum/topic/2428)
 - Fix for WispService port -> httpPort

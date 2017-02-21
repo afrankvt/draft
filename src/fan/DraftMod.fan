@@ -155,7 +155,7 @@ abstract const class DraftMod : WebMod
     if (pod == null) throw DraftErr(404)
 
     // lookup file
-    file := pod.file(`/` + req.uri[2..-1], false)
+    file := pod.file(`/` + req.uri[2..-1].pathOnly, false)
     if (file == null) throw DraftErr(404)
     FileWeblet(file).onService
   }
