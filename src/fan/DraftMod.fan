@@ -157,7 +157,15 @@ abstract const class DraftMod : WebMod
     // lookup file
     file := pod.file(`/` + req.uri[2..-1].pathOnly, false)
     if (file == null) throw DraftErr(404)
-    FileWeblet(file).onService
+
+    // FileWeblet seems ripe for Broken pipe errors; so catch
+    // and ignore to avoid spamming error logs
+    try { FileWeblet(file).onService }
+    catch (IOErr err)
+    {
+      if (err.msg.contains("java.net.SocketException: Broken pipe")) return
+      throw err
+    }
   }
 
 //////////////////////////////////////////////////////////////////////////
