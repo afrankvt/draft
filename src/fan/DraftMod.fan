@@ -124,6 +124,10 @@ abstract const class DraftMod : WebMod
     }
     catch (Err err)
     {
+      // do not spam logs with broken pipe errs
+      if (err.msg.contains("java.net.SocketException: Broken pipe")) return
+
+      // wrap in DraftErr and log
       if (err isnot DraftErr) err = DraftErr(500, err)
       logErr(err)
       onErr(err)
@@ -157,15 +161,7 @@ abstract const class DraftMod : WebMod
     // lookup file
     file := pod.file(`/` + req.uri[2..-1].pathOnly, false)
     if (file == null) throw DraftErr(404)
-
-    // FileWeblet seems ripe for Broken pipe errors; so catch
-    // and ignore to avoid spamming error logs
-    try { FileWeblet(file).onService }
-    catch (IOErr err)
-    {
-      if (err.msg.contains("java.net.SocketException: Broken pipe")) return
-      throw err
-    }
+    FileWeblet(file).onService
   }
 
 //////////////////////////////////////////////////////////////////////////
