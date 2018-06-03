@@ -1,7 +1,7 @@
 ### Version 1.1 (working)
 - Simplify version to `<major>.<minor>.<patch>`
 - Move from BitBucket -> GitHub
-- Fix to suppress broken socket pipe errs in `DraftMod.onService`
+- Fix to suppress socket I/O errs in `DraftMod.onService`
 
 ### Version 1.0.6 (20-Feb-2017)
 - Fix onServicePod to ignore query string

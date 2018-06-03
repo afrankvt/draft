@@ -124,8 +124,10 @@ abstract const class DraftMod : WebMod
     }
     catch (Err err)
     {
-      // do not spam logs with broken pipe errs
+      // do not spam logs with socket errs; should we just
+      // suppress all java.net.SocketExceptions?
       if (err.msg.contains("java.net.SocketException: Broken pipe")) return
+      if (err.msg.contains("java.net.SocketException: Connection reset")) return
 
       // wrap in DraftErr and log
       if (err isnot DraftErr) err = DraftErr(500, err)
