@@ -24,11 +24,11 @@ moderately complicated web apps:
 
 ## Installing
 
-    fanr install -r http://repo.status302.com/fanr/ draft
+    fanr install -r http://eggbox.fantomfactory.org/fanr/ draft
 
 API Documentation:
 
-[http://repo.status302.com/doc/draft/](http://repo.status302.com/doc/draft/)
+[http://eggbox.fantomfactory.org/pods/draft/api/](http://eggbox.fantomfactory.org/pods/draft/api/)
 
 ## Using
 
@@ -97,12 +97,29 @@ the `-prod` flag when launching:
 
 Some parameters can be defined in `etc/draft/config.props` (see
 [docLang::Env](http://fantom.org/doc/docLang/Env.html) and
-[sys::Env#config](http://fantom.org/doc/sys/Env.html#config) for more info):
+[sys::Env.config](http://fantom.org/doc/sys/Env.html#config) for more info):
 
     // configures `DraftMod.pubDir`
     pubDir=/Users/andy/proj/example/pub/
 
+## Persistent Web Sessions
+
+The default session store in Wisp will not maintain sessions through a restart
+of the Fantom process.  If you wish to persist sessions for things such as
+logged in users, configure Wisp to use [DraftSessionStore](http://eggbox.fantomfactory.org/pods/draft/api/DraftSessionStore):
+
+    :::fantom
+    wisp := WispService
+    {
+      ...
+      it.sessionStore = DraftSessionStore(it)
+      {
+        it.expires  = 3hr
+        it.storeDir = `/some/dir/`
+      }
+    }
+
 ## Dependancies
 
-Draft requires Fantom 1.0.62 or higher.  For best results always use
+Draft requires Fantom 1.0.70 or higher.  For best results always use
 the latest Fantom version available.
