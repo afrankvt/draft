@@ -40,8 +40,8 @@ const class DraftSessionStore : Actor, WispSessionStore
   ** Parent WispService instance.
   override const WispService service
 
-  ** Optional directory to persist session stage between restarts, or
-  ** do not persist if 'null'.
+  ** Optional directory to persist sessions between restarts, or
+  ** do not persist sessions if 'null'.
   const File? storeDir
 
   ** Duration of sessions to live before they are automatically removed.
