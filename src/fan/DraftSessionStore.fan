@@ -14,6 +14,18 @@ using wisp
 ** DraftSessionStore is an in-memory WispSessionStore with optional support
 ** for serializing store to disk to maintatin session through reboots.
 **
+** To use DraftSessionStore:
+**
+**   wisp := WispService
+**   {
+**     ...
+**     it.sessionStore = DraftSessionStore(it)
+**     {
+**       it.expires  = 3hr
+**       it.storeDir = `/some/dir/`
+**     }
+**   }
+**
 const class DraftSessionStore : Actor, WispSessionStore
 {
   ** It-block constructor.

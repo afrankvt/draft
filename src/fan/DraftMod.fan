@@ -35,8 +35,8 @@ abstract const class DraftMod : WebMod
   **   /foo/bar/index.css     =>  `/pub/index.css`
   **   /foo/bar/img/logo.png  =>  `/pub/img/logo.png`
   **
-  ** The pubDir may also be defined as a [config]`sys::Env#config`
-  ** property in 'etc/draft/config.props`
+  ** The pubDir may also be defined as a [config]`sys::Env.config`
+  ** property in 'etc/draft/config.props'
   **
   const File? pubDir := null
 
