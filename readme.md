@@ -32,38 +32,39 @@ API Documentation:
 
 ## Using
 
-    :::fantom
-    const class MyMod : DraftMod
-    {
-      ** Constructor.
-      new make()
-      {
-        pubDir = `/Users/andy/proj/example/pub/`.toFile
-        logDir = `/Users/andy/proj/example/log/`.toFile
-        router = Router {
-          routes = [
-            Route("/", "GET", #index),
-            Route("/echo/{name}/{age}", "GET", #print),
-          ]
-        }
-      }
-
-      ** Display index page.
-      Void index()
-      {
-        res.headers["Content-Type"] = "text/plain"
-        res.out.printLine("Hi there!")
-      }
-
-      ** Print URL args.
-      Void print(Str:Str args)
-      {
-        name := args["name"]
-        age  := args["age"].toInt
-        res.headers["Content-Type"] = "text/plain"
-        res.out.printLine("Hi $name, you are $age years old!")
-      }
+```fantom
+const class MyMod : DraftMod
+{
+  ** Constructor.
+  new make()
+  {
+    pubDir = `/Users/andy/proj/example/pub/`.toFile
+    logDir = `/Users/andy/proj/example/log/`.toFile
+    router = Router {
+      routes = [
+        Route("/", "GET", #index),
+        Route("/echo/{name}/{age}", "GET", #print),
+      ]
     }
+  }
+
+  ** Display index page.
+  Void index()
+  {
+    res.headers["Content-Type"] = "text/plain"
+    res.out.printLine("Hi there!")
+  }
+
+  ** Print URL args.
+  Void print(Str:Str args)
+  {
+    name := args["name"]
+    age  := args["age"].toInt
+    res.headers["Content-Type"] = "text/plain"
+    res.out.printLine("Hi $name, you are $age years old!")
+  }
+}
+```
 
 ## Running
 
@@ -108,16 +109,17 @@ The default session store in Wisp will not maintain sessions through a restart
 of the Fantom process.  If you wish to persist sessions for things such as
 logged in users, configure Wisp to use [DraftSessionStore](http://eggbox.fantomfactory.org/pods/draft/api/DraftSessionStore):
 
-    :::fantom
-    wisp := WispService
-    {
-      ...
-      it.sessionStore = DraftSessionStore(it)
-      {
-        it.expires  = 3hr
-        it.storeDir = `/some/dir/`
-      }
-    }
+```fantom
+wisp := WispService
+{
+  ...
+  it.sessionStore = DraftSessionStore(it)
+  {
+    it.expires  = 3hr
+    it.storeDir = `/some/dir/`
+  }
+}
+```
 
 ## Dependancies
 
