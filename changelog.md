@@ -2,6 +2,7 @@
 - Simplify version to `<major>.<minor>.<patch>`
 - Move from BitBucket -> GitHub
 - Fix to suppress socket I/O errs in `DraftMod.onService`
+- Add support for maintaining web sessions through reboots
 
 ### Version 1.0.6 (20-Feb-2017)
 - Fix onServicePod to ignore query string

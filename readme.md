@@ -20,6 +20,7 @@ moderately complicated web apps:
 - Rails-style Flash one-time message API
 - Pre/post service hooks for wrapping request handling
 - Simple setup of a public resource directory
+- Optional support for maintaining web sessions through a restart/reboot
 
 ## Installing
 
