@@ -1,4 +1,6 @@
-### Version 1.1 (working)
+### Version 1.2 (working)
+
+### Version 1.1 (4-Jun-2018)
 - Simplify version to `<major>.<minor>.<patch>`
 - Move from BitBucket -> GitHub
 - Fix to suppress socket I/O errs in `DraftMod.onService`
