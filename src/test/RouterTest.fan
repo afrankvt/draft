@@ -69,8 +69,8 @@ internal class RouterTest : Test
       routes = [
         Route("/",          "GET", #index),
         Route("/foo",       "GET", #foo),
-        Route("/foo/bar",   "GET", #bar),
         Route("/foo/{arg}", "GET", #fooArg),
+        Route("/foo/bar",   "GET", #bar),    // literal after {arg} to check Route.sort
       ]
     }
 

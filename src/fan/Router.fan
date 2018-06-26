@@ -18,7 +18,11 @@ using web
 const class Router
 {
   ** Constructor.
-  new make(|This| f) { f(this) }
+  new make(|This| f)
+  {
+    f(this)
+    this.routes = Route.sort(routes)
+  }
 
   ** RouteGroup configuration.
   const RouteGroup[] groups := [,]
@@ -28,7 +32,8 @@ const class Router
 
   ** Match a request to Route. If no matches are found, returns
   ** 'null'.  The first route that matches is chosen.  Routes
-  ** from `groups` are matched before `routes`.
+  ** from `groups` are matched before `routes`.  Literal routes
+  ** are matched before parameterized routes.
   RouteMatch? match(Uri uri, Str method)
   {
     for (i:=0; i<groups.size; i++)
@@ -67,7 +72,11 @@ const class Router
 const class RouteGroup
 {
   ** It-block ctor.
-  new make(|This| f) { f(this) }
+  new make(|This| f)
+  {
+    f(this)
+    this.routes = Route.sort(routes)
+  }
 
   ** Meta-data for this group.
   const Str:Obj meta := [:]
@@ -109,6 +118,7 @@ const class Route
       varIndex := tokens.findIndex |t| { t.type == RouteToken.vararg }
       if (varIndex != null && varIndex != tokens.size-1) throw Err()
 
+      this.isLiteral = tokens.all |t| { t.type == RouteToken.literal }
     }
     catch (Err err) throw ArgErr("Invalid pattern $pattern.toCode", err)
   }
@@ -157,6 +167,24 @@ const class Route
 
     return map
   }
+
+  ** Sort a list of routes by bubbling literals to top, and
+  ** maintaining existing order for remaining routes.
+  internal static Route[] sort(Route[] routes)
+  {
+    lits := routes.findAll |r| { r.isLiteral }
+    if (lits.isEmpty) return routes
+
+    copy := routes.dup.rw
+    lits.eachr |r| { copy.moveTo(r, 0) }
+    return copy.toImmutable
+  }
+
+  ** 'toStr' is `pattern`.
+  override Str toStr() { pattern }
+
+  ** Is the route all literal tokens (no args or patterns)?
+  internal const Bool isLiteral
 
   ** Parsed tokens.
   private const RouteToken[] tokens

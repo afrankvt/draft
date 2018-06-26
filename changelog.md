@@ -1,4 +1,5 @@
 ### Version 1.2 (working)
+* Fix Router to match literal routes before parameterized routes
 
 ### Version 1.1 (4-Jun-2018)
 - Simplify version to `<major>.<minor>.<patch>`
