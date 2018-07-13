@@ -1,4 +1,7 @@
-### Version 1.2 (working)
+### Version 1.3 (working)
+* Update DraftMod to service `subMods` before `pub` and `pod`
+
+### Version 1.2 (26-Jun-2018)
 * Fix Router to match literal routes before parameterized routes
 
 ### Version 1.1 (4-Jun-2018)
