@@ -76,14 +76,6 @@ abstract const class DraftMod : WebMod
       // set mod
       req.mod = this
 
-      // check for pub
-      if (req.uri.path.first == "pub" && pubDir != null)
-        { onServicePub; return }
-
-      // check for pod
-      if (req.uri.path.first == "pod")
-        { onServicePod; return }
-
       // check for sub mod
       sub := subMods[req.modRel.path.first ?: ""]
       if (sub != null)
@@ -93,6 +85,14 @@ abstract const class DraftMod : WebMod
         sub.onService
         return
       }
+
+      // check for pub
+      if (req.uri.path.first == "pub" && pubDir != null)
+        { onServicePub; return }
+
+      // check for pod
+      if (req.uri.path.first == "pod")
+        { onServicePod; return }
 
       // match req to Route
       match := router.match(req.modRel, req.method)
