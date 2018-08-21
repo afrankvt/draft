@@ -1,4 +1,4 @@
-### Version 1.3 (working)
+### Version 1.3 (21-Aug-2018)
 * Update DraftMod to service `subMods` before `pub` and `pod`
 
 ### Version 1.2 (26-Jun-2018)
