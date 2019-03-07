@@ -20,6 +20,17 @@ const class DraftErr : Err
     this.errCode = errCode
   }
 
+  ** Construct a DraftErr that will redirect to a given URI.
+  ** This will always be a 303 temporary redirect.
+  new makeRedirect(Uri uri) : super.make("redirect", null)
+  {
+    this.errCode = 303
+    this.redirectUri = uri
+  }
+
   ** HTTP error code for this error.
   const Int errCode
+
+  ** URI
+  const Uri? redirectUri
 }

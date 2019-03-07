@@ -208,6 +208,13 @@ abstract const class DraftMod : WebMod
   ** Handle an error condition during a request.
   virtual Void onErr(DraftErr err)
   {
+    // first check if this was a redirect
+    if (err.redirectUri != null)
+    {
+      res.redirect(err.redirectUri, err.errCode)
+      return
+    }
+
     // pick best err msg
     msg := err.errCode == 500 && err.cause != null ? err.cause.msg : err.msg
 
