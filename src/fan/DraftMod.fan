@@ -261,6 +261,7 @@ abstract const class DraftMod : WebMod
     if (req.uri == `/favicon.ico`) return
     if (req.uri == `/robots.txt`) return
     if (err.errCode == 404) return
+    if (err.redirectUri != null) return
 
     buf := StrBuf()
     buf.add("$err.msg - $req.uri\n")

@@ -1,5 +1,8 @@
 ### Version 1.5 (working)
 
+### Version 1.4.1 (7-Mar-2019)
+* Fix to not log DraftErr redirects
+
 ### Version 1.4 (7-Mar-2019)
 * Add DraftErr.makeRedirect to allow redirects using `throw`
 
