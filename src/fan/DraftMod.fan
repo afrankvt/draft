@@ -97,6 +97,7 @@ abstract const class DraftMod : WebMod
       // match req to Route
       match := router.match(req.modRel, req.method)
       if (match == null) throw DraftErr(404)
+      req.stash["draft.route"] = match
       req.stash["draft.route.meta"] = match.meta
 
       // access session here before response is commited so
